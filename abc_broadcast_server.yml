@@ -1,0 +1,13 @@
+---
+View::Web:
+    INCLUDE_PATH:
+        - __path_to(root)__
+
+Plugin::Static::Simple:
+    include_path:
+        - __path_to(root)__
+
+Model::DB:
+    schema_class: ABC::Broadcast::Server::Schema
+    connect_info:
+        dsn: 'dbi:SQLite:dbname=abc.db'
