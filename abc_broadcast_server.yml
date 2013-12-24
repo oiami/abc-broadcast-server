@@ -10,7 +10,7 @@ Plugin::Static::Simple:
 Model::DB:
     schema_class: ABC::Broadcast::Server::Schema
     connect_info:
-        dsn: 'dbi:SQLite:dbname=abc.db'
+        dsn: 'dbi:SQLite:__path_to(sql/SQLite/ABC.sqlite)__'
 
 Model::GCM:
     api_key: 'AIzaSyBwZzqQMacT2xSEKeAHxKgTEPsO12t5cVw'
