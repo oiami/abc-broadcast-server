@@ -51,13 +51,26 @@ sub device : Local ActionClass('REST') {}
 sub device_PUT {
     my ( $self, $c ) = @_;
     my $device_id = $c->req->params->{device_id};
-    $self->status_ok($c, entity => { success=> 'true', device_id => $device_id});
+    my $res = $c->model('DB::Reciever')->update_or_create({'deviceid' => $device_id});
+    if( $res ){
+        $self->status_ok($c, entity => { success=> 'true', message => $device_id . ' is created'});
+    } else {
+        $self->status_bad_request( $c,
+                message => 'Cannot create data' );
+    }
 }
 
 sub device_GET {
     my ( $self, $c ) = @_;
     my $device_id = $c->req->params->{device_id};
-    $self->status_ok($c, entity => { success=> 'true', device_id => $device_id});
+
+    my $res = $c->model('DB::Reciever')->update_or_create({'deviceid' => $device_id});
+    if( $res ){
+        $self->status_ok($c, entity => { success=> 'true', message => $device_id . ' is created'});
+    } else {
+        $self->status_bad_request( $c,
+                message => 'Cannot create data' );
+    }
 }
 
 1;
