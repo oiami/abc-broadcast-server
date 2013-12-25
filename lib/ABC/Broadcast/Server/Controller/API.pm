@@ -26,13 +26,18 @@ sub message_PUT {
     my $msg = $c->req->params->{message};
     my $ug    = new Data::UUID;
     my $uuid1 = $ug->create_str();
-     my $gcm = WWW::Google::Cloud::Messaging->new(api_key => 'AIzaSyBwZzqQMacT2xSEKeAHxKgTEPsO12t5cVw');
+    my $gcm = WWW::Google::Cloud::Messaging->new(api_key => 'AIzaSyBwZzqQMacT2xSEKeAHxKgTEPsO12t5cVw');
     
-    my $device_id="APA91bGgmK-qmS1ayTRsWF4StMnvPRFMIbFZ04kHmudVGmwR1jojxbQVv6X-t3zV79fsqh1Gfp_z2CrqFGpdvN2E6UoTan3v5XDyc-LEls4PnAxKzjsqTVo0XkijbICuH3TtpqHEi9haJD2kMDO2LKePIHelkSy90707lIdtjhpaQsdpzOMhsEo";
+    my $device_id = "APA91bGgmK-qmS1ayTRsWF4StMnvPRFMIbFZ04kHmudVGmwR1jojxbQVv6X-t3zV79fsqh1Gfp_z2CrqFGpdvN2E6UoTan3v5XDyc-LEls4PnAxKzjsqTVo0XkijbICuH3TtpqHEi9haJD2kMDO2LKePIHelkSy90707lIdtjhpaQsdpzOMhsEo";
     
     my $res = $c->model('GCM')->send_message( [$device_id], $msg);
-    die $res->error unless $res->is_success;
-    $self->status_ok($c, entity => { success=> 'true'});
+    if( $res->is_success ){
+        my $msg_res = $c->model('DB::Message')->create({'detail' => $msg});
+        $self->status_ok($c, entity => { success => 'Message is sent' });
+    } else {
+        $self->status_bad_request( $c,
+                message => 'Cannot send data' . $res->error );
+    }
 }
 
 sub message_GET {
