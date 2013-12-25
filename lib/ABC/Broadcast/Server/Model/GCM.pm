@@ -52,7 +52,7 @@ Returns a Video::Hvordan::Web::View::Helper::Paginator object with results
 sub send_message {
     my ($self, $devices, $message) = @_;
     my $res = $self->gcm->send({
-      registration_ids => [ $devices ],
+      registration_ids => $devices,
       collapse_key     => $self->_collapse_key,
       data             => {
         message => $message,
